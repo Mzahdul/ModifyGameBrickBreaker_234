@@ -108,3 +108,26 @@ class Paddle(GameObject):
                                        x + self.width / 2, y + self.height / 2,
                                        fill='#FFB643', outline='#D69022', width=2)
         super().__init__(canvas, item)
+
+    def set_ball(self, ball):
+        self.ball = ball
+
+    def move(self, offset, max_width):
+        coords = self.get_position()
+        if coords[0] + offset >= 0 and coords[2] + offset <= max_width:
+            super().move(offset, 0)
+            if self.ball is not None and self.ball.stuck:
+                self.ball.move(offset, 0)
+
+class Brick(GameObject):
+    COLORS = {1: '#AF0E00', 2: '#D78100', 3: '#FFD449'}
+
+    def __init__(self, canvas, x, y, hits):
+        self.width = 75
+        self.height = 20
+        self.hits = hits
+        color = Brick.COLORS[hits]
+        item = canvas.create_rectangle(x - self.width / 2, y - self.height / 2,
+                                       x + self.width / 2, y + self.height / 2,
+                                       fill=color, outline='#C06C00', width=1, tags='brick')
+        super().__init__(canvas, item)
